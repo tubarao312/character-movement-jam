@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=4 uid="uid://d4ela7ln8gqn4"]
+[gd_scene load_steps=55 format=4 uid="uid://d4ela7ln8gqn4"]
 
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="1_gk8lp"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="2_jnl7y"]
@@ -18,17 +18,28 @@
 [ext_resource type="Texture2D" uid="uid://bitxk8hmghcwc" path="res://assets/animations/player/jump/JumpMid01.png" id="12_7tjd1"]
 [ext_resource type="Texture2D" uid="uid://bxkxaeyyjsbb6" path="res://assets/animations/player/jump/JumpRise01.png" id="13_eomg4"]
 [ext_resource type="Texture2D" uid="uid://csj4n1ekm0tv5" path="res://assets/animations/player/run/Run03.png" id="13_mkysr"]
+[ext_resource type="Texture2D" uid="uid://tw4m3jgnqmxe" path="res://assets/animations/player/ledge/ledge_grabbing/LedgeGrab01.png" id="14_2xe0j"]
 [ext_resource type="Texture2D" uid="uid://dk0lwo0inl1t5" path="res://assets/animations/player/run/Run04.png" id="14_slni7"]
 [ext_resource type="Texture2D" uid="uid://h4ifmlg7lv1g" path="res://assets/animations/player/run/Run05.png" id="15_5m0qp"]
+[ext_resource type="Texture2D" uid="uid://bctilrrx213gy" path="res://assets/animations/player/ledge/ledge_grabbing/LedgeGrab02.png" id="15_y0stj"]
+[ext_resource type="Texture2D" uid="uid://c4vo32dd5t12q" path="res://assets/animations/player/ledge/ledge_grabbing/LedgeGrab03.png" id="16_gthnr"]
 [ext_resource type="Texture2D" uid="uid://digqwyx5m4anq" path="res://assets/animations/player/run/Run06.png" id="16_lmurp"]
 [ext_resource type="Texture2D" uid="uid://0vn8p3d6ya00" path="res://assets/animations/player/run/Run07.png" id="17_1dfab"]
+[ext_resource type="Texture2D" uid="uid://byauc3qx2on8" path="res://assets/animations/player/ledge/ledge_grabbing/LedgeGrab04.png" id="17_3kgr6"]
 [ext_resource type="Texture2D" uid="uid://0w4dxhxf0gxl" path="res://assets/animations/player/run/Run08.png" id="18_776vq"]
+[ext_resource type="Texture2D" uid="uid://csqdjuf8fg68n" path="res://assets/animations/player/ledge/ledge_grabbing/LedgeGrab05.png" id="18_smoxy"]
+[ext_resource type="Texture2D" uid="uid://cyvxf0sgg2iwg" path="res://assets/animations/player/ledge/ledge_hangging/LedgeHang01.png" id="19_7g8po"]
 [ext_resource type="Texture2D" uid="uid://ddkpagcfgs4ia" path="res://assets/animations/player/sprint/Sprint01.png" id="19_f7ccb"]
+[ext_resource type="Texture2D" uid="uid://cv8eswfir7r3q" path="res://assets/animations/player/ledge/ledge_hangging/LedgeHang02.png" id="20_hqsow"]
 [ext_resource type="Texture2D" uid="uid://cxwyyjo0a3c1r" path="res://assets/animations/player/sprint/Sprint02.png" id="20_t31g7"]
 [ext_resource type="Texture2D" uid="uid://5kk0ybk40nwf" path="res://assets/animations/player/sprint/Sprint03.png" id="21_0rjpg"]
+[ext_resource type="Texture2D" uid="uid://c4dl7pcuyxlv" path="res://assets/animations/player/ledge/ledge_hangging/LedgeHang03.png" id="21_ki16f"]
 [ext_resource type="Texture2D" uid="uid://dpm38pph4tk5r" path="res://assets/animations/player/sprint/Sprint04.png" id="22_r7q1e"]
+[ext_resource type="Texture2D" uid="uid://bcs6p23dre85l" path="res://assets/animations/player/ledge/ledge_hangging/LedgeHang04.png" id="22_yyuuy"]
+[ext_resource type="Texture2D" uid="uid://chqf0d2filaqr" path="res://assets/animations/player/ledge/ledge_hangging/LedgeHang05.png" id="23_i2r84"]
 [ext_resource type="Texture2D" uid="uid://cqsgyfjjmqlg2" path="res://assets/animations/player/sprint/Sprint05.png" id="23_i32gu"]
 [ext_resource type="Texture2D" uid="uid://b3oc3086tjvcc" path="res://assets/animations/player/sprint/Sprint06.png" id="24_b4lpe"]
+[ext_resource type="Texture2D" uid="uid://dnkpc1xfcufa" path="res://assets/animations/player/ledge/ledge_hangging/LedgeHang06.png" id="24_p7p4s"]
 [ext_resource type="Texture2D" uid="uid://dlx6n10qbkbbj" path="res://assets/animations/player/walk/Walk01.png" id="25_j16ci"]
 [ext_resource type="Texture2D" uid="uid://5b2kneo58joy" path="res://assets/animations/player/walk/Walk02.png" id="26_nplnf"]
 [ext_resource type="Texture2D" uid="uid://bsrn8ngew25g4" path="res://assets/animations/player/walk/Walk03.png" id="27_mopxc"]
@@ -45,7 +56,7 @@ transition = 0
 ease = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ln2gj"]
-size = Vector2(14, 40)
+size = Vector2(10, 40)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7hep6"]
 animations = [{
@@ -101,6 +112,49 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("14_2xe0j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_y0stj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_gthnr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_3kgr6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_smoxy")
+}],
+"loop": false,
+"name": &"ledge_grabbing",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_7g8po")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_hqsow")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_ki16f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_yyuuy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_i2r84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_p7p4s")
+}],
+"loop": true,
+"name": &"ledge_hanging",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("11_o33bk")
 }, {
 "duration": 1.0,
@@ -127,6 +181,11 @@ animations = [{
 "loop": true,
 "name": &"run",
 "speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"slide",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -180,6 +239,8 @@ animations = [{
 "name": &"walk",
 "speed": 10.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qchow"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2t3gy"]
 texture = ExtResource("5_s020y")
@@ -302,7 +363,24 @@ shape = SubResource("RectangleShape2D_ln2gj")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
 position = Vector2(0, -35)
 sprite_frames = SubResource("SpriteFrames_7hep6")
-animation = &"jump_fall"
+animation = &"idle"
+
+[node name="LedgeGrabShapeCast2D" type="ShapeCast2D" parent="Player"]
+position = Vector2(0, -34)
+scale = Vector2(0.9, 0.05)
+shape = SubResource("RectangleShape2D_qchow")
+target_position = Vector2(0, 0)
+max_results = 1
+collide_with_areas = true
+
+[node name="AntiLedgeGrabShapeCast2D" type="ShapeCast2D" parent="Player"]
+position = Vector2(0, -38)
+rotation = 3.14159
+scale = Vector2(0.9, 0.05)
+shape = SubResource("RectangleShape2D_qchow")
+target_position = Vector2(0, 280)
+max_results = 1
+collide_with_areas = true
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAAAAA4AAAABAAAAAAABAA4AAAABAAAAAAACAA4AAAABAAAAAAADAA4AAAAEAAIAAAAEAA4AAAABAAEAAAAFAA4AAAABAAEAAAAGAA4AAAABAAEAAAAHAA4AAAABAAEAAAAIAA4AAAABAAEAAAAJAA4AAAADAAIAAAAKAA4AAAABAAAAAAALAA4AAAABAAAAAAAMAA4AAAABAAAAAAANAA4AAAABAAAAAAAOAA4AAAABAAAAAAAPAA4AAAABAAAAAAAQAA4AAAABAAAAAAARAA4AAAABAAAAAAASAA4AAAABAAAAAAATAA4AAAABAAAAAAAUAA4AAAAEAAIAAAAVAA4AAAABAAEAAAAWAA4AAAABAAEAAAAXAA4AAAABAAEAAAAYAA4AAAABAAEAAAAZAA4AAAABAAEAAAAaAA4AAAABAAEAAAAbAA4AAAABAAEAAAAcAA4AAAABAAEAAAAdAA4AAAABAAEAAAAAAA8AAAABAAEAAAAAABAAAAABAAEAAAABABAAAAABAAEAAAACABAAAAABAAEAAAADABAAAAABAAEAAAAEABAAAAABAAEAAAAFABAAAAABAAEAAAAGABAAAAABAAEAAAAHABAAAAABAAEAAAAIABAAAAABAAEAAAAJABAAAAABAAEAAAAKABAAAAABAAEAAAALABAAAAABAAEAAAAMABAAAAABAAEAAAANABAAAAABAAEAAAAOABAAAAABAAEAAAAPABAAAAABAAEAAAAQABAAAAABAAEAAAARABAAAAABAAEAAAASABAAAAABAAEAAAATABAAAAABAAEAAAAUABAAAAABAAEAAAAVABAAAAABAAEAAAAWABAAAAABAAEAAAAXABAAAAABAAEAAAAYABAAAAABAAEAAAAZABAAAAABAAEAAAAaABAAAAABAAEAAAAbABAAAAABAAEAAAAcABAAAAABAAEAAAAdABAAAAABAAEAAAAdAA8AAAABAAEAAAAcAA8AAAABAAEAAAAbAA8AAAABAAEAAAAaAA8AAAABAAEAAAAZAA8AAAABAAEAAAAYAA8AAAABAAEAAAAXAA8AAAABAAEAAAAWAA8AAAABAAEAAAAVAA8AAAABAAEAAAAUAA8AAAABAAEAAAATAA8AAAABAAEAAAASAA8AAAABAAEAAAARAA8AAAABAAEAAAAQAA8AAAABAAEAAAAPAA8AAAABAAEAAAAOAA8AAAABAAEAAAANAA8AAAABAAEAAAAMAA8AAAABAAEAAAALAA8AAAABAAEAAAAKAA8AAAABAAEAAAAJAA8AAAABAAEAAAAIAA8AAAABAAEAAAAHAA8AAAABAAEAAAAGAA8AAAABAAEAAAAFAA8AAAABAAEAAAAEAA8AAAABAAEAAAADAA8AAAABAAEAAAACAA8AAAABAAEAAAABAA8AAAABAAEAAAAVAA0AAAAFAAYAAAAUAA0AAAAEAAYAAAAWAAwAAAAEAAYAAAAXAAwAAAAFAAYAAAAYAAsAAAAEAAYAAAAZAAsAAAAFAAYAAAAaAAoAAAAEAAYAAAAbAAoAAAAFAAYAAAAcAAkAAAAEAAYAAAAdAAkAAAAFAAYAAAAWAA0AAAAEAAIAAAAXAA0AAAABAAEAAAAYAAwAAAAEAAIAAAAZAAwAAAABAAEAAAAaAAsAAAAEAAIAAAAcAAoAAAAEAAIAAAAYAA0AAAABAAEAAAAZAA0AAAABAAEAAAAaAAwAAAABAAEAAAAbAAwAAAABAAEAAAAbAAsAAAABAAEAAAAcAAsAAAABAAEAAAAdAAsAAAABAAEAAAAdAAoAAAABAAEAAAAaAA0AAAABAAEAAAAbAA0AAAABAAEAAAAcAA0AAAABAAEAAAAdAA0AAAABAAEAAAAdAAwAAAABAAEAAAAcAAwAAAABAAEAAAAJAA0AAAACAAEAAAAJAAwAAAACAAEAAAAJAAsAAAACAAEAAAAJAAoAAAACAAEAAAAJAAkAAAACAAAAAAAIAAkAAAABAAAAAAAHAAkAAAADAAIAAAAGAAkAAAABAAEAAAAFAAkAAAABAAEAAAAFAAoAAAABAAEAAAAFAAsAAAABAAEAAAAFAAwAAAABAAEAAAAFAA0AAAABAAEAAAAGAAgAAAAGAAYAAAAHAAgAAAAHAAYAAAAFAAgAAAABAAAAAAAEAAgAAAABAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAEAAAADAAoAAAAAAAEAAAADAAsAAAAAAAEAAAADAAwAAAAAAAEAAAADAA0AAAAAAAEAAAAEAA0AAAABAAEAAAAEAAwAAAABAAEAAAAEAAsAAAABAAEAAAAEAAoAAAABAAEAAAAEAAkAAAABAAEAAAAGAAoAAAABAAEAAAAGAAwAAAABAAEAAAAGAAsAAAABAAEAAAAHAAoAAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAAHAA0AAAABAAEAAAAGAA0AAAABAAEAAAAIAAwAAAABAAEAAAAIAAsAAAABAAEAAAAIAAoAAAABAAEAAAAIAA0AAAABAAEAAAA=")
