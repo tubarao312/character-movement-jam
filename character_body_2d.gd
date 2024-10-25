@@ -492,6 +492,5 @@ func step_ledge_grabbing_state(info: StateInformation):
 
 # Simple hack for changing animations
 func _on_animation_finished():
-	print("Animation finished: ", _animated_sprite.animation)
 	if _animated_sprite.animation == "ledge_grabbing":
 		_animated_sprite.play("ledge_hanging")
