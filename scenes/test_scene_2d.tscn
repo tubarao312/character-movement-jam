@@ -124,10 +124,11 @@ position = Vector2(246, 116)
 [node name="PhantomCameraHost" type="Node" parent="Camera2D"]
 script = ExtResource("3_4tdht")
 
-[node name="PhantomCamera2D" type="Node2D" parent="."]
+[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
 position = Vector2(246, 116)
 script = ExtResource("4_y2tku")
 follow_mode = 2
+follow_target = NodePath("../Player")
 snap_to_pixel = true
 tween_resource = SubResource("Resource_nsxwd")
 follow_offset = Vector2(0, -25)

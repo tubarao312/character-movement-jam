@@ -244,7 +244,7 @@ shape = SubResource("RectangleShape2D_ln2gj")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -35)
 sprite_frames = SubResource("SpriteFrames_7hep6")
-animation = &"idle"
+animation = &"walk"
 
 [node name="LedgeGrabShapeCast2D" type="ShapeCast2D" parent="."]
 position = Vector2(0, -34)

@@ -6,9 +6,6 @@ func step(delta: float) -> void:
 	# If idle, restart the coyote time so that
 	# the player can jump again
 	player.coyote_manager.restart_coyote_time()
-
-	if player.input.direction < 0: player.facing_direction = Enums.FacingDirection.LEFT
-	elif player.input.direction > 0: player.facing_direction = Enums.FacingDirection.RIGHT
 		
 	if player.input.direction == 0: transition_to(Enums.PlayerStates.IDLE)
 	# elif player.is_sprinting and player.is_on_floor: transition_to(Enums.PlayerStates.SPRINTING)
@@ -18,8 +15,16 @@ func step(delta: float) -> void:
 		player.horizontal_velocity = 0
 	player.horizontal_velocity = move_toward(player.horizontal_velocity, target_velocity, player.RUN_SPEED * delta * 6)
 	
-	# TODO - Change animation speed and add walking animation depending on walk speed
-	player._animated_sprite.play("run")
+	# Determine animation based on horizontal velocity
+	var speed_ratio = abs(player.horizontal_velocity) / player.RUN_SPEED
+	var animation = "walk" if abs(player.horizontal_velocity) < player.RUN_SPEED * 0.5 else "run"
+	player._animated_sprite.play(animation)
+	
+	# Adjust animation speed based on velocity
+	if animation == "run":
+		player._animated_sprite.speed_scale = max(0.75, speed_ratio)
+	else:
+		player._animated_sprite.speed_scale = 1.0
 	
 	# Jump
 	if player.input.is_jump_queued() and player.coyote_manager.has_coyote_jump():
