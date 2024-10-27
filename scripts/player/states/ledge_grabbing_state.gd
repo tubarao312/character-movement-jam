@@ -6,6 +6,7 @@ var ledge_grab_direction := Enums.FacingDirection.RIGHT
 
 func enter(_args: Dictionary = {}) -> void:
 	player.input.reset_jump_queue()
+	player.dash_manager.reset_dash_charge()
 	player._animated_sprite.play("ledge_grabbing")
 	ledge_grab_direction = player.facing_direction
 	player.velocity.y = 0
@@ -18,7 +19,7 @@ func step(_delta: float) -> void:
 	# The player just wants to get down
 	if player.input.is_ignoring_ledge_grab():
 		print("Leaving ledge grab because player is ignoring ledge grab")
-		transition_to(Enums.PlayerStates.IDLE)
+		transition_to(Enums.PlayerStates.AIRBORNE, {"rising": false})
 		return
 
 	# Player wants to jump

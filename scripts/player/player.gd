@@ -10,7 +10,7 @@ var RUN_SPEED = 150.0
 var facing_direction = Enums.FacingDirection.RIGHT
 var floor_normal = Vector2.UP
 var horizontal_velocity = 0.0 ## The character's velocity perpendicular to the floor normal
-var on_floor = false	
+var on_floor = false
 
 
 # Player Input _______________________________________________________________
@@ -22,23 +22,26 @@ class PlayerInput:
 	var jump_just_pressed: bool = false
 	var ignore_ledge_grab_pressed: bool = false
 	var direction: float = 0.0
-	var sprint_pressed: bool = false
+	var dash_pressed: bool = false
+	var input_dir: Vector2 = Vector2.ZERO
 
 	# Jump queue variables
 	var jump_queue_timer: float = 0.0
-	const JUMP_QUEUE_TIME: float = 0.1
+	const JUMP_QUEUE_TIME: float = 0.2
 	
 	# Ledge grab ignore variables
 	var ignore_ledge_grab_timer: float = 0.0
-	const IGNORE_LEDGE_GRAB_TIME: float = 0.2
+	const IGNORE_LEDGE_GRAB_TIME: float = 0.35
 	
 	func _init():
 		pass
 	
 	func update(delta: float):
-		direction = Input.get_axis("ui_left", "ui_right")
-		sprint_pressed = Input.is_action_pressed("ui_sprint")
-		
+		var raw_direction = Input.get_axis("ui_left", "ui_right")
+		direction = sign(raw_direction) * pow(abs(raw_direction), 0.25)
+		dash_pressed = Input.is_action_pressed("ui_sprint")
+		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+
 		## Jump
 		jump_pressed = Input.is_action_pressed("ui_accept")
 		jump_just_pressed = Input.is_action_just_pressed("ui_accept")
@@ -89,7 +92,6 @@ class PlayerInput:
 var input := PlayerInput.new()
 
 
-
 # Coyote Jump _______________________________________________________________
 #
 # Coyote Jump is not really an input related mechanic, therefore it won't
@@ -119,6 +121,54 @@ class CoyoteJumpManager:
 var coyote_manager := CoyoteJumpManager.new()
 
 
+# Dash _______________________________________________________________________
+#
+# Dash has a cooldown that must be maintained outside the state machine.
+
+@onready var upper_raycast = $DashRaycasts/UpperRaycast2D
+@onready var middle_raycast = $DashRaycasts/MiddleRaycast2D
+@onready var lower_raycast = $DashRaycasts/LowerRaycast2D
+@onready var dash_raycasts = $DashRaycasts
+
+class DashManager:
+	
+	# Dash Cooldown
+
+	const DASH_COOLDOWN = 0.5
+	var dash_cooldown_timer = 0.0
+
+	func restart_dash_cooldown():
+		dash_cooldown_timer = DASH_COOLDOWN
+	
+	func reset_dash_cooldown():
+		dash_cooldown_timer = 0
+
+	func decrement_dash_cooldown(delta: float):
+		if dash_cooldown_timer > 0:
+			dash_cooldown_timer = max(dash_cooldown_timer - delta, 0)
+
+
+	# Dash Charge
+
+	var has_dash_charge: bool = true # Reset whenever the player touches the floor
+
+	func reset_dash_charge(): has_dash_charge = true
+
+	func use_dash_charge(): 
+		has_dash_charge = false
+		restart_dash_cooldown()
+
+
+	# General
+
+	func can_dash() -> bool:
+		return has_dash_charge and dash_cooldown_timer <= 0
+
+	func process(delta: float):
+		decrement_dash_cooldown(delta)
+
+var dash_manager := DashManager.new()
+
 ## Good practice to init each component's variables in a specific function 
 ## instead of here, so that it's easier to digest and know what belongs where.
 func _ready():
@@ -136,8 +186,10 @@ func _physics_process(delta):
 
 	_animated_sprite.flip_h = (facing_direction == Enums.FacingDirection.LEFT)
 
-	process_state(delta)		
-	adjust_velocity()
+	dash_manager.process(delta)
+
+	process_state(delta)
+	adjust_velocity()	
 	move_and_slide()
 
 	# TODO - Move this
@@ -148,8 +200,11 @@ func _physics_process(delta):
 ## Adjusts the velocity of the character based on their angle with the floor.
 ##
 ## NOTE - Very hacky and requires careful reading to understand
-func adjust_velocity():
-
+func adjust_velocity() -> void:
+	
+	if current_state == Enums.PlayerStates.DASHING:
+		return
+	
 	## If the character is on the floor, we check the 
 	## floor normal and update it accordingly.
 	if on_floor:
@@ -160,6 +215,7 @@ func adjust_velocity():
 			floor_normal = Vector2.UP
 	else:
 		floor_normal = Vector2.UP
+
 
 	## We then calculate the perpendicular vector to the floor normal
 	# var perpendicular_vector = floor_normal.rotated(PI/2)
@@ -196,6 +252,7 @@ func _ready_state_handlers():
 	state_handlers[Enums.PlayerStates.RUNNING] = RunningState.new(self)
 	state_handlers[Enums.PlayerStates.LEDGE_GRABBING] = LedgeGrabbingState.new(self)
 	state_handlers[Enums.PlayerStates.AIRBORNE] = AirborneState.new(self)
+	state_handlers[Enums.PlayerStates.DASHING] = DashState.new(self)
 	# state_handlers[Enums.PlayerStates.SPRINTING] = SprintingState.new(self)
 
 
@@ -232,6 +289,10 @@ func is_post_ledge_grab_jump_active() -> bool:
 @onready var ledge_grab_shapecast = $LedgeGrabShapeCast2D
 @onready var anti_ledge_grab_shapecast = $AntiLedgeGrabShapeCast2D
 
+
+
+
+
 # Ledge Grabbing Constants
 var LEDGE_GRAB_DISTANCE_HORIZONTAL = 20.0
 var LEDGE_GRAB_DISTANCE_VERTICAL = 20.0
@@ -245,7 +306,7 @@ func should_ledge_grab() -> bool:
 	if input.direction == 0: return false
 
 	# We don't want to ledge grab unless we're falling down
-	if velocity.y <= 0: return false
+	if not input.is_jump_queued() and velocity.y <= -75: return false
 
 	# If we're currently ignoring ledge grabs, we don't want to grab any
 	if input.is_ignoring_ledge_grab(): return false
@@ -283,3 +344,6 @@ func should_ledge_grab() -> bool:
 func _on_animation_finished():
 	if _animated_sprite.animation == "ledge_grabbing":
 		_animated_sprite.play("ledge_hanging")
+
+	if _animated_sprite.animation == "dash_start":
+		_animated_sprite.play("dash_loop")

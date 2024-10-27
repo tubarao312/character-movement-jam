@@ -25,7 +25,7 @@ var JUMP_VELOCITY = -400.0
 var JUMP_BOOST_MAX_TIME = 0.1
 var JUMP_BOOST_MIN_TIME = 0.1
 var MIN_JUMP_VELOCITY = -400.0
-var JUMP_CANCEL_VELOCITY = -200
+var JUMP_CANCEL_VELOCITY = -10
 var LEDGE_GRAB_JUMP_BOOST = -75.0  # Additional upward velocity when jumping from ledge grab
 var LEDGE_GRAB_HORIZONTAL_BOOST = 250.0  # Additional horizontal velocity when jumping from ledge grab
 
@@ -49,6 +49,7 @@ func enter(args: Dictionary = {}) -> void:
 	
 	# Reset important variables
 	air_time = 0.0
+	player.input.reset_jump_queue()
 
 	# Get the rising argument
 	is_rising = args.get("rising")
@@ -82,7 +83,12 @@ func step(delta: float) -> void:
 	if is_rising and not player.input.jump_pressed: cancel_rising()
 	
 	# If the player is falling, we also want to cancel the rising
-	if player.velocity.y > JUMP_CANCEL_VELOCITY: cancel_rising()
+	if is_rising and player.velocity.y > JUMP_CANCEL_VELOCITY: cancel_rising()
+
+	# Dash
+	if player.input.dash_pressed and player.dash_manager.can_dash():
+		transition_to(Enums.PlayerStates.DASHING)
+		return
 
 	# If the player touches the floor, we want to transition to the idle state
 	if player.is_on_floor(): transition_to(Enums.PlayerStates.IDLE)
@@ -100,7 +106,7 @@ func step(delta: float) -> void:
 	# Handle horizontal movement
 	var direction = player.input.direction
 	var target_velocity = direction * player.RUN_SPEED # * player.get_jump_horizontal_velocity_coefficient()
-	player.horizontal_velocity = move_toward(player.horizontal_velocity, target_velocity, player.RUN_SPEED * delta * 10)
+	player.horizontal_velocity = move_toward(player.horizontal_velocity, target_velocity, player.RUN_SPEED * delta * 15)
 	
 	# Apply gravity
 	player.velocity += player.get_gravity() * delta

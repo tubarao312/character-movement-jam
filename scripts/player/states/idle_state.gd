@@ -3,6 +3,7 @@ class_name IdleState
 
 func enter(_args: Dictionary = {}) -> void:
 	player._animated_sprite.play("idle")
+	player.dash_manager.reset_dash_charge()
 
 func step(_delta: float) -> void:
 	# If idle, restart the coyote time so that
@@ -11,6 +12,11 @@ func step(_delta: float) -> void:
 
 	if player.input.direction != 0:
 		transition_to(Enums.PlayerStates.RUNNING)
+		return
+
+	# Dash
+	if player.input.dash_pressed and player.dash_manager.can_dash():
+		transition_to(Enums.PlayerStates.DASHING)
 		return
 
 	# Jump
@@ -23,7 +29,7 @@ func step(_delta: float) -> void:
 		transition_to(Enums.PlayerStates.AIRBORNE, {"rising": false})
 		return
 	
-	player.horizontal_velocity = move_toward(player.horizontal_velocity, 0, max(player.RUN_SPEED, abs(player.horizontal_velocity)) * _delta * 12)
+	player.horizontal_velocity = move_toward(player.horizontal_velocity, 0, max(player.RUN_SPEED, abs(player.horizontal_velocity)) * _delta * 15)
 	
 	if player.is_on_floor:
 		player._animated_sprite.play("idle")
